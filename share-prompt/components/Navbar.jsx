@@ -3,13 +3,26 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
-import { signIn, signOut, useSession, getProviders } from 'next-auth'
+import { signIn, signOut, useSession, getProviders } from 'next-auth/react'
 
 const Navbar = () => {
+
+    const {data: session, status} = useSession()
+
     const [isUserLogin, setIsUserLogin] = useState(true)
 
     const [providers, setProviders] = useState([])
     const [toggleDropdown, setToggleDropdown] = useState(false)
+
+    useEffect(() => {
+        const setUpProviders = async () => {
+            const response = await getProviders()
+
+            setProviders(response)
+        }
+
+        setUpProviders()
+    }, [])
 
     return (
         <nav className='flex flex-between w-full mb-16 pt-3'>
@@ -24,9 +37,10 @@ const Navbar = () => {
                 <p className="logo_text">Promptopia</p>
             </Link>
 
+            {/* {alert(session?.user)} */}
             {/* Desktop Navigation */}
             <div className="sm:flex hidden">
-                {isUserLogin ? (
+                {session?.user ? (console.log(status),
                     <div className="flex gap-3 md:gap-5">
                         <Link href='/create-prompt' className='black_btn'>
                             Create Post
@@ -50,10 +64,11 @@ const Navbar = () => {
                     <>
                         {providers &&
                             Object.values(providers).map((provider) => (
+                                console.log(provider, status),
                                 <button
                                     type='button'
                                     key={provider.name}
-                                    onClick={() => { signIn }}
+                                    onClick={() => signIn(provider.id)}
                                     className='black_btn'
                                 >
                                     Sign In
@@ -65,7 +80,7 @@ const Navbar = () => {
 
             {/* Mobile Navigation */}
             <div className="sm:hidden flex relative">
-                {isUserLogin ? (
+                {session?.user ? (
                     <div className="flex">
                         <Image
                             src='/assets/images/logo.svg'
