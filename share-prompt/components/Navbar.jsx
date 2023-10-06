@@ -7,7 +7,7 @@ import { signIn, signOut, useSession, getProviders } from 'next-auth/react'
 
 const Navbar = () => {
 
-    const {data: session, status} = useSession()
+    const { data: session, status } = useSession()
 
     const [isUserLogin, setIsUserLogin] = useState(true)
 
@@ -25,7 +25,7 @@ const Navbar = () => {
     }, [])
 
     return (
-        <nav className='flex flex-between w-full mb-16 pt-3'>
+        <nav className='flex flex-between w-full mt-5 mb-16 pt-3'>
             <Link href='/' className='flex gap-3 flex-center'>
                 <Image
                     src='/assets/images/logo.svg'
