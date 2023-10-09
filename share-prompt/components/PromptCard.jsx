@@ -9,6 +9,14 @@ import { usePathname, useRouter } from 'next/navigation'
 const PromptCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
   const [copied, setCopied] = useState("")
   console.log(post);
+
+  // Copy prompt text from prompt card using 'Clipboard API'
+  const handleCopy = () => {
+    setCopied(post.prompt)
+    navigator.clipboard.writeText(post.prompt)
+    setTimeout(() => setCopied(false), 3000)
+  }
+
   return (
     <div className='prompt_card'>
       <div className="flex justify-between items-start gap-5">
@@ -31,7 +39,7 @@ const PromptCard = ({ post, handleEdit, handleDelete, handleTagClick }) => {
             </h3>
           </div>
         </div>
-        <div className="copy_btn" onClick={() => { }}>
+        <div className="copy_btn" onClick={handleCopy}>
           <Image
             src={
               copied === post.prompt ? "/assets/icons/tick.svg"
