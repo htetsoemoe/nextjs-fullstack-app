@@ -32,8 +32,31 @@ const UpdatePrompt = () => {
         }
     }, [promptId])
 
-    const updatePrompt = () => {
+    const updatePrompt = async (event) => {
+        event.preventDefault()
+        setSubmitting(true)
 
+        if (!promptId) {
+            return alert("Missing Prompt ID")
+        }
+
+        try {
+            const response = await fetch(`/api/prompt/${promptId}`, {
+                method: "PATCH",
+                body: JSON.stringify({
+                    prompt: post.prompt,
+                    tag: post.tag,
+                }),
+            })
+
+            if (response.ok) {
+                router.push("/")
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setSubmitting(false)
+        }
     }
 
     return (
